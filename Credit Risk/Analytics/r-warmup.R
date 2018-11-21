@@ -57,3 +57,29 @@ summary(mortgage)
 
 # combined the calculated statistics in a matrix.
 
+select.summary <- cbind(n.mortgage, mean.mortgage, st.dev.mortgage,
+	  min.mortgage, max.mortgage)
+
+colnames(select.summary)
+
+print(round(select.summary, 4))
+
+# construct a linear regression model
+mortgage.lm <- lm(default_time ~ FICO_orig_time + LTV_orig_time + gdp_time,
+   data = mortgage)
+
+summary(mortgage.lm)
+
+# Self-defined functions
+
+example <- function(lhs, rhs) {
+	d = as.data.frame(cbind(lhs, rhs))
+	example.lm = lm(lhs ~ ., data = d)
+	return(summary(example.lm))
+}
+
+example(lhs = mortgage$default_time, rhs = mortgage$FICO_orig_time)
+
+example(lhs = mortgage$default_time,
+  rhs = with(mortgage, cbind(FICO_orig_time, LTV_orig_time)))
+
