@@ -1,0 +1,92 @@
+---
+title: "Exploratory Data Analysis"
+author: "Moretz, Brandon"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: spacelab
+    df_print: paged
+---
+
+```{r knitr_setup, include = FALSE}
+
+knitr::opts_chunk$set(echo = FALSE, eval = TRUE, fig.width = 12)
+
+```
+
+# __Credit Risk__
+
+```{r packages_setup, message = FALSE, warning = FALSE}
+
+library(data.table, quietly = TRUE, warn.conflicts = FALSE)
+
+assignInNamespace("cedta.pkgEvalsUserCode", c(data.table:::cedta.pkgEvalsUserCode, "rtvs"), "data.table")
+
+library(dplyr, quietly = TRUE, warn.conflicts = FALSE)
+library(ggplot2, quietly = TRUE, warn.conflicts = FALSE)
+library(ggthemes, quietly = TRUE, warn.conflicts = FALSE)
+library(gridExtra, quietly = TRUE, warn.conflicts = FALSE)
+library(kableExtra, quietly = TRUE, warn.conflicts = FALSE)
+library(GGally, quietly = TRUE, warn.conflicts = FALSE)
+library(knitr, quietly = TRUE, warn.conflicts = FALSE)
+library(RColorBrewer, quietly = TRUE, warn.conflicts = FALSE)
+
+library(moments, quietly = TRUE, warn.conflicts = FALSE)
+library(gmodels, quietly = TRUE, warn.conflicts = FALSE)
+library(vcd, quietly = TRUE, warn.conflicts = FALSE)
+library(mixtools, quietly = TRUE, warn.conflicts = FALSE)
+
+theme_set(theme_light())
+
+# Theme Overrides
+theme_update(plot.title = element_text(hjust = 0.5),
+			 axis.text.x = element_text(size = 10),
+			 axis.text.y = element_text(size = 10),
+			 axis.title = element_text(face = "bold", size = 12, colour = "steelblue4"),
+			 legend.position = "top", legend.title = element_blank())
+
+pretty_kable <- function(data, title, dig = 2) {
+	kable(data, caption = title, digits = dig, big.mark = "'") %>%
+		kable_styling(bootstrap_options = c("striped", "hover"))
+}
+
+pretty_vector <- function(vec, label = "") {
+	pander::pander(vec)
+}
+
+base.dir <- ""
+
+lp.w <- "E:/GitHub/Credit-Risk"
+lp.h <- "C:/Projects/Credit-Risk"
+
+if (file.exists(lp.w)) {
+    base.dir <- lp.w
+} else if (file.exists(lp.h)) {
+    base.dir <- lp.h
+}
+
+data.path <- paste0(base.dir, "/datasets/")
+
+# simple replacement for read.csv that returns a data.table.
+loadDataFile <- function(file_name) {
+	data.raw <- fread(paste0(data.path, file_name),
+	header = TRUE, stringsAsFactors = FALSE, na.strings = c("NA", ""))
+
+	data <- setNames(data.raw, tools::toTitleCase(tolower(names(data.raw))))
+
+	return(data)
+}
+
+```
+
+```{r data_setup, message = FALSE, warning = FALSE}
+
+mortgage <- loadDataFile("mortgage.csv")
+
+pretty_kable(mortgage, "Mortgage Raw Data")
+
+head(mortgage)
+
+```

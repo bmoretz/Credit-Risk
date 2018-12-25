@@ -1,0 +1,17 @@
+install.packages("knitr")
+install.packages("ggthemes")
+install.packages("gridExtra")
+install.packages("kableExtra")
+install.packages("GGally")
+install.packages("RColorBrewer")
+install.packages("rmarkdown")
+
+install.packages("moments")
+install.packages("gmodels")
+install.packages("vcd")
+install.packages("mixtools")
+
+install.packages("data.table")
+install.packages("ggplot2")
+install.packages("dplyr")
+install.packages("tidyverse")
